@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mahashivratri · Maha Annadanam</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+
+    body {
+      background: #f4ede8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 12px 30px;
+    }
+
+    .app-container {
+      max-width: 420px;
+      width: 100%;
+      background: white;
+      border-radius: 32px 32px 24px 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    /* navigation tabs on TOP */
+    .nav-tabs {
+      display: flex;
+      background: #f8e7da;
+      border-radius: 0 0 30px 30px;
+      padding: 12px 6px 8px;
+      justify-content: space-around;
+      border-bottom: 2px solid #dbbca0;
+    }
+    .nav-item {
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #59371f;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      transition: 0.1s;
+    }
+    .nav-item.active {
+      background: #c2491f;
+      color: white;
+      box-shadow: 0 3px 0 #7a3c1a;
+    }
+
+    .page {
+      padding: 20px 18px;
+      background: white;
+    }
+
+    /* ----- home page (consistent) ----- */
+    .hero-gradient {
+      background: linear-gradient(145deg, #fae5d2, #f5d5b0);
+      border-radius: 28px;
+      padding: 26px 18px 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .hero-gradient h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #2e241e;
+      line-height: 1.2;
+    }
+    .hero-gradient h1 span {
+      display: block;
+      font-size: 1.2rem;
+      font-weight: 400;
+      letter-spacing: 2px;
+    }
+    .donate-now-btn {
+      background: #c2491f;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1.4rem;
+      padding: 12px 25px;
+      border-radius: 60px;
+      width: fit-content;
+      margin: 16px auto 10px;
+      box-shadow: 0 8px 0 #732e12, 0 10px 15px rgba(0,0,0,0.1);
+      cursor: pointer;
+    }
+    .sadhguru-quote {
+      font-style: italic;
+      font-size: 0.9rem;
+      background: rgba(255, 255, 240, 0.7);
+      padding: 18px 14px;
+      border-radius: 30px;
+      margin: 15px 0 8px;
+      border: 1px solid #ccb59b;
+    }
+    .campaign-card {
+      background: #fef7e8;
+      border-radius: 28px;
+      padding: 18px;
+      border: 1px solid #ebd5bd;
+      margin: 16px 0;
+    }
+    .goal-progress {
+      background: #eadaca;
+      border-radius: 30px;
+      height: 18px;
+      margin: 10px 0 5px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      width: 93.1%;
+      height: 100%;
+      background: #c2491f;
+      border-radius: 30px;
+    }
+    .donate-simple-btn {
+      background: #222;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 40px;
+      font-weight: 700;
+      border: none;
+      margin: 10px 0;
+      cursor: pointer;
+    }
+    .img-placeholder {
+      background: #d6c5b8;
+      background-image: linear-gradient(45deg, #cab9aa 25%, #e2d2c4 25%, #e2d2c4 50%, #cab9aa 50%);
+      background-size: 20px 20px;
+      border-radius: 20px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #2f2f2f;
+      font-weight: 600;
+      border: 2px dashed #9b7b61;
+      margin: 10px 0;
+    }
+
+    /* ----- leaderboard page (minimal) ----- */
+    .leaderboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .leaderboard-header h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #261d16;
+    }
+    .update-badge {
+      background: #ffe3cf;
+      padding: 4px 10px;
+      border-radius: 30px;
+      font-size: 0.7rem;
+    }
+    .leaderboard-entry {
+      display: flex;
+      align-items: center;
+      background: #f8efe5;
+      border-radius: 50px;
+      padding: 6px 15px 6px 8px;
+      margin: 10px 0;
+      border: 1px solid #ddc7b3;
+    }
+    .rank { font-weight: 800; font-size: 1.2rem; min-width: 32px; color: #884b24; }
+    .region { font-weight: 600; flex: 2; color: #2e241e; }
+    .amount {
+      font-weight: 700; color: #1a3d2f; background: #e6dacd;
+      padding: 3px 10px; border-radius: 40px; font-size: 0.9rem; margin-right: 6px;
+    }
+    .supporters { background: #dac2ab; padding: 3px 10px; border-radius: 40px; font-size: 0.8rem; }
+    .share-row {
+      display: flex; gap: 20px; justify-content: center; margin: 24px 0; color: #5e3f29; font-size: 1.4rem;
+    }
+
+    /* ---------- DONATE PAGE with 4 steps (selection, personal, payment, finish) ---------- */
+    .step-indicator-new {
+      display: flex;
+      justify-content: space-between;
+      background: #faf3e9;
+      border-radius: 40px;
+      padding: 10px 12px;
+      margin: 10px 0 20px;
+      font-weight: 600;
+      color: #5f4a36;
+      border: 1px solid #e5cfbb;
+    }
+    .step-indicator-new span {
+      flex: 1;
+      text-align: center;
+      font-size: 0.8rem;
+      position: relative;
+    }
+    .step-indicator-new span:not(:last-child)::after {
+      content: "›";
+      position: absolute;
+      right: -6px;
+      color: #b58d6f;
+      font-size: 1.2rem;
+      top: -2px;
+    }
+    .step-indicator-new .active-step {
+      color: #c2491f;
+      font-weight: 800;
+    }
+
+    /* step panels */
+    .step-panel {
+      background: #faf3e9;
+      border-radius: 28px;
+      padding: 22px 18px;
+      margin: 8px 0 20px;
+      border: 1px solid #e5cfbb;
+    }
+
+    /* amount pills */
+    .amount-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 15px 0;
+    }
+    .pill {
+      background: white;
+      border: 1.5px solid #b58d6f;
+      color: #3d2c1e;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 40px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #ddd1c0;
+    }
+    .pill.active {
+      background: #c2491f;
+      border-color: #8f3d17;
+      color: white;
+      box-shadow: 0 3px 0 #632f12;
+    }
+    .other-input {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      padding: 5px 12px;
+      border-radius: 40px;
+      border: 1px solid #b58d6f;
+      margin: 10px 0 20px;
+    }
+    .other-input input {
+      border: none;
+      background: transparent;
+      font-size: 1rem;
+      width: 90px;
+      outline: none;
+      font-weight: 600;
+    }
+
+    /* form fields */
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #4a3a2c;
+      margin-bottom: 4px;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #b58d6f;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      background: white;
+      outline: none;
+    }
+    .phone-group {
+      display: flex;
+      gap: 8px;
+    }
+    .phone-group select {
+      width: 100px;
+    }
+
+    /* payment methods (simulated) */
+    .payment-option {
+      background: white;
+      border: 1px solid #b58d6f;
+      border-radius: 50px;
+      padding: 14px 16px;
+      margin: 12px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+    .payment-option input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #c2491f;
+    }
+
+    /* buttons */
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .prev-btn, .next-btn, .pay-now-btn {
+      flex: 1;
+      background: #c2491f;
+      color: white;
+      font-weight: 700;
+      padding: 14px;
+      border: none;
+      border-radius: 60px;
+      font-size: 1rem;
+      box-shadow: 0 4px 0 #732e12;
+      cursor: pointer;
+    }
+    .prev-btn {
+      background: #6c5a4b;
+      box-shadow: 0 4px 0 #3f332a;
+    }
+    .disabled-btn {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    /* finish panel */
+    .finish-message {
+      text-align: center;
+      padding: 20px 10px;
+    }
+    .finish-message i {
+      font-size: 3.5rem;
+      color: #2e7d5e;
+      margin-bottom: 15px;
+    }
+    .finish-message h2 {
+      color: #1d4e3d;
+      margin-bottom: 12px;
+    }
+    .finish-message p {
+      margin: 8px 0;
+      font-size: 0.95rem;
+    }
+
+    /* terms / fine print */
+    .terms-text {
+      font-size: 0.68rem;
+      color: #4f4f4f;
+      margin: 15px 0 5px;
+      line-height: 1.5;
+    }
+
+    .page-hidden { display: none; }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <!-- navigation tabs on TOP -->
+  <div class="nav-tabs">
+    <button class="nav-item active" id="navHome">Home</button>
+    <button class="nav-item" id="navLeaderboard">Leaderboard</button>
+    <button class="nav-item" id="navDonate">Donate</button>
+  </div>
+
+  <!-- HOME PAGE -->
+  <div id="homePage" class="page">
+    <div class="hero-gradient">
+      <h1>MAHASHIVRATRI<br><span>& MAHA ANNADANAM</span></h1>
+      <div class="donate-now-btn" id="homeDonateBtn1">Donate Now</div>
+    </div>
+    <div class="sadhguru-quote">
+      <i class="fas fa-quote-left"></i> In our tradition, serving spiritual seekers and monks has always been of utmost importance. This can be a path in itself. The most beautiful expression of this is the Annadanam - the sacred offering of food. - Sadhguru
+    </div>
+    <div class="campaign-card">
+      <h3 style="color:#2e241e;">EVERY DONATION COUNTS</h3>
+      <p style="font-size:0.9rem;">Contribute online towards Mahashivratri activities and Maha Annadanam at Isha Yoga Center.</p>
+      <div style="display: flex; align-items: center; gap: 8px; margin: 8px 0;">
+        <span style="font-weight:700;">₹ 25 Crore</span> <span style="color: #555; font-size:0.85rem;">93.1% of pledged goal</span>
+      </div>
+      <div class="goal-progress"><div class="progress-fill"></div></div>
+      <button class="donate-simple-btn" id="homeDonateBtn2"><i class="fas fa-hand-holding-heart"></i> DONATE</button>
+    </div>
+    <div style="position: relative; width: 100%; height: 200px; border-radius: 20px; margin: 16px 0; background: url('hero.jpg') center/cover no-repeat; display: flex; align-items: center; overflow: hidden;">
+      <div style="position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);"></div>
+      <div style="position: relative; z-index: 1; padding: 20px 25px; color: white; max-width: 60%;">
+        <h2 style="font-size: 1.4rem; font-weight: 800; line-height: 1.3; text-shadow: 2px 2px 8px rgba(0,0,0,0.5);">Make Your Contribution Online, Every Donation Counts!</h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEADERBOARD PAGE -->
+  <div id="leaderboardPage" class="page page-hidden">
+    <div class="leaderboard-header">
+      <h2>LEADERBOARD</h2>
+      <span class="update-badge"><i class="far fa-clock"></i> last updated 1 min back</span>
+    </div>
+    <p style="font-weight:500; margin-bottom: 8px;">INDIAN STATES AND CITIES</p>
+    <div id="leaderboardEntries"></div>
+    <div class="share-row">
+      <i class="fab fa-facebook-f"></i> <i class="fab fa-twitter"></i> <i class="fab fa-whatsapp"></i> <i class="far fa-share-square"></i>
+    </div>
+    <img src="hero.jpg" alt="Velliangiri mountains" style="width: 100%; height: 60px; border-radius: 20px; object-fit: cover;">
+  </div>
+
+  <!-- DONATE PAGE with 4 steps -->
+  <div id="donatePage" class="page page-hidden">
+    <!-- step indicator -->
+    <div class="step-indicator-new" id="stepIndicator">
+      <span id="step1Label" class="active-step">Donation</span>
+      <span id="step2Label">Personal Info</span>
+      <span id="step3Label">Payment</span>
+      <span id="step4Label">Finish</span>
+    </div>
+
+    <!-- STEP 1: AMOUNT SELECTION -->
+    <div id="step1Panel" class="step-panel">
+      <h3 style="margin-bottom: 8px;">Select amount</h3>
+      <div class="amount-pills" id="amountPills">
+        <span class="pill active" data-value="500">500</span>
+        <span class="pill" data-value="1000">1,000</span>
+        <span class="pill" data-value="2000">2,000</span>
+        <span class="pill" data-value="5000">5,000</span>
+        <span class="pill" data-value="10000">10,000</span>
+        <span class="pill" data-value="other">other</span>
+      </div>
+      <div class="other-input">
+        <span>₹</span>
+        <input type="text" id="customAmount" placeholder="Enter amount" value="500">
+      </div>
+      <!-- terms (short version) -->
+      <div class="terms-text">
+        • Donations are not refundable<br>
+        • Not tax deductible under 80G<br>
+        • Only INR donations from India
+      </div>
+      <div class="button-group">
+        <button class="prev-btn disabled-btn" disabled>Back</button>
+        <button class="next-btn" id="toStep2Btn">Next</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: PERSONAL INFO (fields as per image, plus required) -->
+    <div id="step2Panel" class="step-panel page-hidden">
+      <h3 style="margin-bottom: 12px;">Personal Information</h3>
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" id="firstName" placeholder="Enter First Name" required>
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" id="lastName" placeholder="Enter Last Name" required>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="Enter Email" required>
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <div class="phone-group" style="gap: 6px;">
+          <span style="font-size: 1.5rem; display: flex; align-items: center;">🇮🇳</span>
+          <input type="tel" id="phone" placeholder="Phone Number" required style="flex: 1;">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Country</label>
+        <input type="text" id="country" value="India" readonly style="background:#eee;">
+      </div>
+      <div class="form-group">
+        <label>Pin Code</label>
+        <input type="text" id="pincode" placeholder="Enter Pin Code" required>
+      </div>
+      <div class="form-group">
+        <label>State</label>
+        <select id="state">
+          <option>Select State</option>
+          <option>Andhra Pradesh</option>
+          <option>Arunachal Pradesh</option>
+          <option>Assam</option>
+          <option>Bihar</option>
+          <option>Chhattisgarh</option>
+          <option>Goa</option>
+          <option>Gujarat</option>
+          <option>Haryana</option>
+          <option>Himachal Pradesh</option>
+          <option>Jharkhand</option>
+          <option>Karnataka</option>
+          <option>Kerala</option>
+          <option>Madhya Pradesh</option>
+          <option>Maharashtra</option>
+          <option>Manipur</option>
+          <option>Meghalaya</option>
+          <option>Mizoram</option>
+          <option>Nagaland</option>
+          <option>Odisha</option>
+          <option>Punjab</option>
+          <option>Rajasthan</option>
+          <option>Sikkim</option>
+          <option>Tamil Nadu</option>
+          <option>Telangana</option>
+          <option>Tripura</option>
+          <option>Uttar Pradesh</option>
+          <option>Uttarakhand</option>
+          <option>West Bengal</option>
+          <option>Jammu and Kashmir</option>
+          <option>Ladakh</option>
+          <option>Delhi</option>
+          <option>Puducherry</option>
+          <option>Chandigarh</option>
+          <option>Andaman and Nicobar Islands</option>
+          <option>Dadra and Nagar Haveli and Daman and Diu</option>
+          <option>Lakshadweep</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>City</label>
+        <input type="text" id="city" placeholder="Enter city" required>
+      </div>
+      <div class="form-group">
+        <label>Address</label>
+        <input type="text" id="address" placeholder="Street, Locality" required>
+      </div>
+      <!-- agreement checkboxes -->
+      <div style="margin: 15px 0;">
+        <div style="display:flex; align-items:flex-start; gap:8px; margin-bottom:10px;">
+          <input type="checkbox" id="taxCheck" style="margin-top:4px;">
+          <label for="taxCheck" style="font-size:0.7rem;">I understand that the donation given to Thenkailaya Bakthi Peravai is not Tax Deductible under section 80G of the Income Tax Act,1961.</label>
+        </div>
+        <div style="display:flex; align-items:flex-start; gap:8px;">
+          <input type="checkbox" id="refundCheck" style="margin-top:4px;">
+          <label for="refundCheck" style="font-size:0.7rem;">I Agree and accept that Donations are not refundable under any circumstances for https://mahashivarathri.org</label>
+        </div>
+      </div>
+      <div class="button-group">
+        <button class="prev-btn" id="backToStep1Btn">Back</button>
+        <button class="next-btn" id="toStep3Btn">Next</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: PAYMENT (simulated gateway) -->
+    <div id="step3Panel" class="step-panel page-hidden">
+      <h3 style="margin-bottom: 16px;">Payment Details</h3>
+      <div class="payment-option">
+        <input type="radio" name="payment" id="card" checked> <label for="card">Credit / Debit Card</label>
+      </div>
+      <div class="payment-option">
+        <input type="radio" name="payment" id="upi"> <label for="upi">UPI (Google Pay / PhonePe)</label>
+      </div>
+      <div class="payment-option">
+        <input type="radio" name="payment" id="netbanking"> <label for="netbanking">Net Banking</label>
+      </div>
+      <!-- dummy card fields to simulate gateway -->
+      <div style="margin: 20px 0 10px;">
+        <div class="form-group">
+          <label>Card Number (demo)</label>
+          <input type="text" placeholder="4111 1111 1111 1111" value="4111 1111 1111 1111">
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="form-group" style="flex:1;">
+            <label>Expiry</label>
+            <input type="text" placeholder="MM/YY" value="12/28">
+          </div>
+          <div class="form-group" style="flex:1;">
+            <label>CVV</label>
+            <input type="text" placeholder="123" value="123">
+          </div>
+        </div>
+      </div>
+      <div class="terms-text" style="margin:10px 0;">Demo gateway — no real transaction</div>
+      <div class="button-group">
+        <button class="prev-btn" id="backToStep2Btn">Back</button>
+        <button class="pay-now-btn" id="payNowBtn">Pay Now</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: FINISH / THANK YOU -->
+    <div id="step4Panel" class="step-panel page-hidden">
+      <div class="finish-message">
+        <i class="fas fa-check-circle"></i>
+        <h2>Thank You!</h2>
+        <p>Your contribution of <strong id="finalAmount">₹500</strong> is greatly appreciated.</p>
+        <p>Your invoice will be sent to your email within 24 hours.</p>
+        <p style="margin-top: 20px; font-size:0.8rem;">🕉️ Har Har Mahadev 🕉️</p>
+      </div>
+      <button class="next-btn" id="finishHomeBtn" style="width:100%;">Return to Home</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ----- page navigation -----
+    const homePage = document.getElementById('homePage');
+    const leaderboardPage = document.getElementById('leaderboardPage');
+    const donatePage = document.getElementById('donatePage');
+    const navHome = document.getElementById('navHome');
+    const navLeaderboard = document.getElementById('navLeaderboard');
+    const navDonate = document.getElementById('navDonate');
+    const navItems = [navHome, navLeaderboard, navDonate];
+
+    function showPage(page) {
+      homePage.classList.add('page-hidden');
+      leaderboardPage.classList.add('page-hidden');
+      donatePage.classList.add('page-hidden');
+      if (page === 'home') homePage.classList.remove('page-hidden');
+      if (page === 'leaderboard') leaderboardPage.classList.remove('page-hidden');
+      if (page === 'donate') donatePage.classList.remove('page-hidden');
+
+      navItems.forEach(btn => btn.classList.remove('active'));
+      if (page === 'home') navHome.classList.add('active');
+      if (page === 'leaderboard') navLeaderboard.classList.add('active');
+      if (page === 'donate') navDonate.classList.add('active');
+    }
+
+    navHome.addEventListener('click', () => showPage('home'));
+    navLeaderboard.addEventListener('click', () => showPage('leaderboard'));
+    navDonate.addEventListener('click', () => { resetDonate(); showPage('donate'); });
+
+    document.getElementById('homeDonateBtn1').addEventListener('click', () => { resetDonate(); showPage('donate'); });
+    document.getElementById('homeDonateBtn2').addEventListener('click', () => { resetDonate(); showPage('donate'); });
+
+    // ----- leaderboard data (14 entries) -----
+    const leaderboardData = [
+      { rank:1, region:'Tamil Nadu & Kerala', amount:'3,81,46,808', supporters:'195' },
+      { rank:2, region:'AP & Telangana', amount:'1,27,91,424', supporters:'294' },
+      { rank:3, region:'Karnataka', amount:'81,78,322', supporters:'237' },
+      { rank:4, region:'Delhi & NCR', amount:'78,74,493', supporters:'37' },
+      { rank:5, region:'Mumbai', amount:'61,41,296', supporters:'61' },
+      { rank:6, region:'Maharashtra', amount:'30,40,453', supporters:'72' },
+      { rank:7, region:'Gujarat', amount:'19,22,655', supporters:'47' },
+      { rank:8, region:'North Karnataka', amount:'14,18,992', supporters:'33' },
+      { rank:9, region:'Madhya Pradesh', amount:'10,66,749', supporters:'30' },
+      { rank:10, region:'East India', amount:'10,08,327', supporters:'42' },
+      { rank:11, region:'Uttar Pradesh', amount:'8,43,210', supporters:'29' },
+      { rank:12, region:'Rajasthan', amount:'7,35,678', supporters:'31' },
+      { rank:13, region:'Haryana', amount:'5,92,400', supporters:'22' },
+      { rank:14, region:'Punjab', amount:'4,25,300', supporters:'18' }
+    ];
+
+    function renderLeaderboard() {
+      const entriesContainer = document.getElementById('leaderboardEntries');
+      if (entriesContainer) {
+        let html = '';
+        leaderboardData.forEach(item => {
+          html += `<div class="leaderboard-entry"><span class="rank">${item.rank}</span><span class="region">${item.region}</span><span class="amount">₹ ${item.amount}</span><span class="supporters">${item.supporters}</span></div>`;
+        });
+        entriesContainer.innerHTML = html;
+      }
+    }
+
+    renderLeaderboard();
+
+    // auto-increment amounts every 1 minute
+    setInterval(() => {
+      const incrementOptions = [500, 1000, 5000, 10000];
+      leaderboardData.forEach(item => {
+        const randomIncrement = incrementOptions[Math.floor(Math.random() * incrementOptions.length)];
+        const currentAmount = parseInt(item.amount.replace(/,/g, ''));
+        const newAmount = currentAmount + randomIncrement;
+        item.amount = newAmount.toLocaleString('en-IN');
+      });
+      renderLeaderboard();
+    }, 60000);
+    // share icons
+    document.querySelectorAll('.share-row i').forEach(icon => {
+      icon.addEventListener('click', () => alert('share dialog (demo)'));
+    });
+
+    // ----- DONATE STEP MANAGEMENT -----
+    const step1 = document.getElementById('step1Panel');
+    const step2 = document.getElementById('step2Panel');
+    const step3 = document.getElementById('step3Panel');
+    const step4 = document.getElementById('step4Panel');
+    const step1Label = document.getElementById('step1Label');
+    const step2Label = document.getElementById('step2Label');
+    const step3Label = document.getElementById('step3Label');
+    const step4Label = document.getElementById('step4Label');
+
+    // amount pills
+    const pills = document.querySelectorAll('#amountPills .pill');
+    const customAmount = document.getElementById('customAmount');
+    pills.forEach(p => {
+      p.addEventListener('click', function() {
+        pills.forEach(pill => pill.classList.remove('active'));
+        this.classList.add('active');
+        const val = this.getAttribute('data-value');
+        if (val !== 'other') customAmount.value = val;
+        else customAmount.value = '';
+      });
+    });
+
+    function resetDonate() {
+      step1.classList.remove('page-hidden');
+      step2.classList.add('page-hidden');
+      step3.classList.add('page-hidden');
+      step4.classList.add('page-hidden');
+      step1Label.className = 'active-step';
+      step2Label.className = '';
+      step3Label.className = '';
+      step4Label.className = '';
+    }
+
+    function goToStep(step) {
+      step1.classList.add('page-hidden');
+      step2.classList.add('page-hidden');
+      step3.classList.add('page-hidden');
+      step4.classList.add('page-hidden');
+      step1Label.className = '';
+      step2Label.className = '';
+      step3Label.className = '';
+      step4Label.className = '';
+
+      if (step === 1) { step1.classList.remove('page-hidden'); step1Label.className = 'active-step'; }
+      else if (step === 2) { step2.classList.remove('page-hidden'); step2Label.className = 'active-step'; }
+      else if (step === 3) { step3.classList.remove('page-hidden'); step3Label.className = 'active-step'; }
+      else if (step === 4) { step4.classList.remove('page-hidden'); step4Label.className = 'active-step'; }
+    }
+
+    // navigation
+    document.getElementById('toStep2Btn').addEventListener('click', () => goToStep(2));
+    document.getElementById('backToStep1Btn').addEventListener('click', () => goToStep(1));
+    document.getElementById('toStep3Btn').addEventListener('click', () => {
+      // validation
+      const firstName = document.getElementById('firstName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const taxCheck = document.getElementById('taxCheck').checked;
+      const refundCheck = document.getElementById('refundCheck').checked;
+
+      // email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email || !emailRegex.test(email)) {
+        alert('Please enter a valid email address (e.g., example@domain.com)');
+        return;
+      }
+
+      // phone validation (10 digits for India)
+      const phoneRegex = /^[0-9]{10}$/;
+      if (!phone || !phoneRegex.test(phone)) {
+        alert('Please enter a valid 10-digit phone number');
+        return;
+      }
+
+      if (!firstName || !taxCheck || !refundCheck) {
+        alert('Please fill required fields and accept both terms.');
+        return;
+      }
+      goToStep(3);
+    });
+    document.getElementById('backToStep2Btn').addEventListener('click', () => goToStep(2));
+
+    document.getElementById('payNowBtn').addEventListener('click', () => {
+      // update final amount in thank you
+      let amountDisplay = customAmount.value.trim() || '500';
+      document.getElementById('finalAmount').innerText = '₹' + amountDisplay;
+      goToStep(4);
+    });
+
+    document.getElementById('finishHomeBtn').addEventListener('click', () => {
+      showPage('home');
+      resetDonate();
+    });
+
+    // start
+    showPage('home');
+    resetDonate();
+  })();
+</script>
+
+<!-- leaderboard scroll -->
+<style>
+  #leaderboardPage { max-height: 550px; overflow-y: auto; padding-bottom: 10px; scrollbar-width: thin; }
+  #leaderboardPage::-webkit-scrollbar { width: 5px; background: #e0d3c5; }
+  #leaderboardPage::-webkit-scrollbar-thumb { background: #b58d6f; border-radius: 10px; }
+  .img-placeholder.small { background-size: 15px 15px; }
+</style>
+</body>
+</html>
