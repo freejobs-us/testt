@@ -6,6 +6,8 @@
   <title>Mahashivratri · Maha Annadanam</title>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Razorpay Script -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
     * {
       margin: 0;
@@ -197,31 +199,51 @@
     .step-indicator-new {
       display: flex;
       justify-content: space-between;
-      background: #faf3e9;
+      gap: 8px;
+      background: transparent;
       border-radius: 40px;
-      padding: 10px 12px;
+      padding: 10px 0;
       margin: 10px 0 20px;
       font-weight: 600;
       color: #5f4a36;
-      border: 1px solid #e5cfbb;
+      border: none;
     }
     .step-indicator-new span {
       flex: 1;
       text-align: center;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       position: relative;
+      background: #f5e8dc;
+      padding: 12px 8px;
+      border-radius: 30px;
+      border: 1.5px solid #d4bfa3;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      line-height: 1.2;
+    }
+    .step-indicator-new span i {
+      font-size: 1.3rem;
+      color: #884b24;
+      transition: all 0.3s ease;
     }
     .step-indicator-new span:not(:last-child)::after {
-      content: "›";
-      position: absolute;
-      right: -6px;
-      color: #b58d6f;
-      font-size: 1.2rem;
-      top: -2px;
+      content: "";
+      display: none;
     }
     .step-indicator-new .active-step {
-      color: #c2491f;
+      color: white;
+      background: #c2491f;
+      border-color: #8f3d17;
       font-weight: 800;
+      box-shadow: 0 3px 0 #732e12;
+    }
+    .step-indicator-new .active-step i {
+      color: #fff;
+      font-size: 1.5rem;
     }
 
     /* step panels */
@@ -434,10 +456,10 @@
   <div id="donatePage" class="page page-hidden">
     <!-- step indicator -->
     <div class="step-indicator-new" id="stepIndicator">
-      <span id="step1Label" class="active-step">Donation</span>
-      <span id="step2Label">Personal Info</span>
-      <span id="step3Label">Payment</span>
-      <span id="step4Label">Finish</span>
+      <span id="step1Label" class="active-step"><i class="fas fa-hand-holding-usd"></i><br>Donation</span>
+      <span id="step2Label"><i class="fas fa-user"></i><br>Personal Info</span>
+      <span id="step3Label"><i class="fas fa-credit-card"></i><br>Payment</span>
+      <span id="step4Label"><i class="fas fa-check-circle"></i><br>Finish</span>
     </div>
 
     <!-- STEP 1: AMOUNT SELECTION -->
@@ -564,39 +586,19 @@
       </div>
     </div>
 
-    <!-- STEP 3: PAYMENT (simulated gateway) -->
+    <!-- STEP 3: PAYMENT (Razorpay gateway) -->
     <div id="step3Panel" class="step-panel page-hidden">
       <h3 style="margin-bottom: 16px;">Payment Details</h3>
-      <div class="payment-option">
-        <input type="radio" name="payment" id="card" checked> <label for="card">Credit / Debit Card</label>
+      <div style="background: #fff8f3; border-radius: 20px; padding: 15px; margin: 15px 0; border: 1px solid #dcc5ac;">
+        <p style="font-size: 0.9rem; color: #3d2c1e; margin-bottom: 10px;"><strong>Amount to Pay:</strong></p>
+        <p style="font-size: 1.8rem; color: #c2491f; font-weight: 800; margin-bottom: 15px;">₹ <span id="paymentAmount">500</span></p>
+        <p style="font-size: 0.8rem; color: #666; margin-bottom: 12px;">Donor Name: <strong id="paymentDonorName">-</strong></p>
+        <p style="font-size: 0.8rem; color: #666; margin-bottom: 15px;">Email: <strong id="paymentDonorEmail">-</strong></p>
       </div>
-      <div class="payment-option">
-        <input type="radio" name="payment" id="upi"> <label for="upi">UPI (Google Pay / PhonePe)</label>
-      </div>
-      <div class="payment-option">
-        <input type="radio" name="payment" id="netbanking"> <label for="netbanking">Net Banking</label>
-      </div>
-      <!-- dummy card fields to simulate gateway -->
-      <div style="margin: 20px 0 10px;">
-        <div class="form-group">
-          <label>Card Number (demo)</label>
-          <input type="text" placeholder="4111 1111 1111 1111" value="4111 1111 1111 1111">
-        </div>
-        <div style="display:flex; gap:8px;">
-          <div class="form-group" style="flex:1;">
-            <label>Expiry</label>
-            <input type="text" placeholder="MM/YY" value="12/28">
-          </div>
-          <div class="form-group" style="flex:1;">
-            <label>CVV</label>
-            <input type="text" placeholder="123" value="123">
-          </div>
-        </div>
-      </div>
-      <div class="terms-text" style="margin:10px 0;">Demo gateway — no real transaction</div>
+      <div class="terms-text" style="margin:10px 0;">Secure payment powered by Razorpay</div>
       <div class="button-group">
         <button class="prev-btn" id="backToStep2Btn">Back</button>
-        <button class="pay-now-btn" id="payNowBtn">Pay Now</button>
+        <button class="pay-now-btn" id="payNowBtn">Pay with Razorpay</button>
       </div>
     </div>
 
@@ -797,11 +799,55 @@
     });
     document.getElementById('backToStep2Btn').addEventListener('click', () => goToStep(2));
 
+    // Update payment display when going to step 3
+    document.addEventListener('goToStep3', () => {
+      const amount = customAmount.value.trim() || '500';
+      const firstName = document.getElementById('firstName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      document.getElementById('paymentAmount').innerText = amount;
+      document.getElementById('paymentDonorName').innerText = firstName;
+      document.getElementById('paymentDonorEmail').innerText = email;
+    });
+
+    // Razorpay Payment Handler
     document.getElementById('payNowBtn').addEventListener('click', () => {
-      // update final amount in thank you
-      let amountDisplay = customAmount.value.trim() || '500';
-      document.getElementById('finalAmount').innerText = '₹' + amountDisplay;
-      goToStep(4);
+      const amountValue = customAmount.value.trim() || '500';
+      const amount = parseInt(amountValue) * 100; // Razorpay accepts amount in paise
+      const firstName = document.getElementById('firstName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+
+      // Razorpay Options
+      const options = {
+        key: 'rzp_test_YOUR_KEY_ID', // Replace with your Razorpay Key ID
+        amount: amount,
+        currency: 'INR',
+        name: 'Mahashivratri Maha Annadanam',
+        description: 'Donation for Mahashivratri & Maha Annadanam',
+        image: '02.jpg', // Optional: Add your logo
+        prefill: {
+          name: firstName,
+          email: email,
+          contact: phone
+        },
+        theme: {
+          color: '#c2491f'
+        },
+        handler: function(response) {
+          // Payment successful
+          document.getElementById('finalAmount').innerText = '₹' + amountValue;
+          goToStep(4);
+          alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
+        },
+        modal: {
+          ondismiss: function() {
+            alert('Payment cancelled');
+          }
+        }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
     });
 
     document.getElementById('finishHomeBtn').addEventListener('click', () => {
