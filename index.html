@@ -418,7 +418,9 @@
   <div id="leaderboardPage" class="page page-hidden">
     <div class="leaderboard-header">
       <h2>LEADERBOARD</h2>
-      <span class="update-badge"><i class="far fa-clock"></i> last updated 1 min back</span>
+      <button id="refreshLeaderboardBtn" style="background: #c2491f; color: white; border: none; border-radius: 30px; padding: 6px 14px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 3px 0 #732e12;">
+        <i class="fas fa-sync-alt"></i> Refresh
+      </button>
     </div>
     <p style="font-weight:500; margin-bottom: 8px;">INDIAN STATES AND CITIES</p>
     <div id="leaderboardEntries"></div>
@@ -677,7 +679,7 @@
 
     // auto-increment amounts every 1 minute
     setInterval(() => {
-      const incrementOptions = [500, 1000, 5000, 10000];
+      const incrementOptions = [500, 1000, 5000];
       leaderboardData.forEach(item => {
         const randomIncrement = incrementOptions[Math.floor(Math.random() * incrementOptions.length)];
         const currentAmount = parseInt(item.amount.replace(/,/g, ''));
@@ -686,6 +688,27 @@
       });
       renderLeaderboard();
     }, 60000);
+
+    // refresh button click handler
+    document.getElementById('refreshLeaderboardBtn').addEventListener('click', () => {
+      const incrementOptions = [500, 1000, 5000];
+      leaderboardData.forEach(item => {
+        const randomIncrement = incrementOptions[Math.floor(Math.random() * incrementOptions.length)];
+        const currentAmount = parseInt(item.amount.replace(/,/g, ''));
+        const newAmount = currentAmount + randomIncrement;
+        item.amount = newAmount.toLocaleString('en-IN');
+      });
+      renderLeaderboard();
+      
+      // rotate the refresh icon
+      const btn = document.getElementById('refreshLeaderboardBtn');
+      btn.style.pointerEvents = 'none';
+      btn.querySelector('i').style.animation = 'spin 0.6s linear';
+      setTimeout(() => {
+        btn.style.pointerEvents = 'auto';
+        btn.querySelector('i').style.animation = '';
+      }, 600);
+    });
     // share icons
     document.querySelectorAll('.share-row i').forEach(icon => {
       icon.addEventListener('click', () => alert('share dialog (demo)'));
@@ -794,7 +817,26 @@
 
 <!-- leaderboard scroll -->
 <style>
-  #leaderboardPage { max-height: 550px; overflow-y: auto; padding-bottom: 10px; scrollbar-width: thin; }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  #leaderboardPage { 
+    max-height: 550px; 
+    overflow-y: auto; 
+    padding-bottom: 10px; 
+    scrollbar-width: thin;
+  }
+  
+  @media (max-width: 768px) {
+    #leaderboardPage {
+      max-height: 100vh;
+      height: auto;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+  
   #leaderboardPage::-webkit-scrollbar { width: 5px; background: #e0d3c5; }
   #leaderboardPage::-webkit-scrollbar-thumb { background: #b58d6f; border-radius: 10px; }
   .img-placeholder.small { background-size: 15px 15px; }
